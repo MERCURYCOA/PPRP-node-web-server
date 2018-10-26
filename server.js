@@ -71,6 +71,13 @@ app.get('/about', (req, res) => {
         pageTitle: 'About Page'
     });
 });
+
+app.get('/projects', (req, res) => {
+    res.render('projects.hbs', {
+        pageTitle: 'Projects'
+    })
+});
+
 app.get('/physics', (req, res) => {
     res.render('physics.hbs', {
         pageTitle: 'Physics Page'
