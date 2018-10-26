@@ -2,11 +2,57 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Some Website</title>
+        <title>Public Peer Review</title>
     </head>
     <body>
         {{> header}}
-        <p>{{screamIt welcomeMessage}}</p>
+
+        <div id="cu-identity">
+            <p><a href="/upload">Upload</a></p>
+        </div>
+
+
+        <!--header-->
+        <div id="header">
+            <a href="/IgnoreMe"></a>
+            <!--<h1>Public Peer Review Platform</h1>-->
+            <div class="login"><a href="/login">Login</a></div>
+            <div id="search">
+                <form id="search-pprp" method="GET" action="/search">
+                    <input type="hidden" name="source" value="header">
+                </form>
+            </div>
+
+            <!--upload-->
+            <!--<form action="/" enctype="multipart/form-data" method="post">-->
+                <!--<input type="file" name="upload" multiple>-->
+                <!--<input type="submit" value="Upload">-->
+            <!--</form>-->
+
+
+        </div>
+
+        <!--content-->
+        <div id="content">
+            <p class="tagline">Public Open Peer Review </p>
+            <form action="/multi" method="get">
+                Subject search and browse:
+                <select name="group">
+                    <option value="grp_physics" selected="selected">Physics</option><option value="grp_cs">Material</option><option value="grp_cs">Computer Science</option><option value="grp_econ">Economics</option><option value="grp_math">Mathematics</option></select>
+                <input type="submit" name="/find" value="Search" />
+            </form>
+            <h2><a href="/material">Material</a></h2>
+            <h2><a href="/math">Mathematics</a></h2>
+            <h2><a href="/physics">Physics</a></h2>
+            <h2><a href="/cs">Computer Science</a></h2>
+            <h2><a href="/econ">Economics</a></h2>
+            <hr />
+            <ul>
+                <li><a href="/donation">Make donation</a></li>
+                <li><a href="/help">Get Help</a></li>
+            </ul>
+        </div>
+
         {{> footer}}
     </body>
 </html>
