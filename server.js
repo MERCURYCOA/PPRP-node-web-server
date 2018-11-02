@@ -1,4 +1,9 @@
-const express = require('express');
+var express = require('express');
+var bodyParser = require('body-parser');
+var path = require('path');
+
+var  expressValidator = require('express-validator');
+
 const hbs = require('hbs');
 const fs = require('fs');
 const port = process.env.PORT || 3030;
@@ -6,6 +11,12 @@ const port = process.env.PORT || 3030;
 // const fileUpload = require('express-fileupload');
 
 var app = express();
+// var logger = function(req, res, next) {
+//     console.log('Logging...');
+//     next();
+// }
+//
+// app.use(logger);
 
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerHelper('getCurrentYear', () => {
@@ -17,6 +28,12 @@ hbs.registerHelper('screamIt', (text) => {
 // app.use((req, res, next) => {
 //     res.render('maintenance.hbs');
 // });
+
+//Global var
+app.use((req, res) => {
+    res.locals.errors = null;
+});
+app.use(expressValidator());
 app.use(express.static(__dirname + '/public'));
 
 app.use((req, res, next) => {
@@ -30,34 +47,43 @@ app.use((req, res, next) => {
     });
     next();
 });
-// app.use(fileUpload());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 
 
 
 app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
+var users = [
+    {
+        id: 1,
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'johndoe@gmail.com'
+    },
+    {
+        id: 2,
+        first_name: 'Bob',
+        last_name: 'Smith',
+        email: 'bobsmith@gmail.com'
+    },
+    {
+        id: 3,
+        first_name: 'Jill',
+        last_name: 'Jackson',
+        email: 'jjackson@gmail.com'
+    }
+]
 
 app.get('/',(req, res) => {
-    // res.send('<h1>Hello Express</h1>');
-    res.render('home.hbs', {
+    res.render('home', {
         pageTitle: 'Public Peer Review Platform',
-        // welcomeMessage: 'Go go!'
     });
 });
-
-
-
-
-
-// app.get('/upload', (req, res) => {
-//     res.render('upload.hbs', {
-//         pageTitle: 'Upload Page'
-//     });
-// });
-
-
 
 app.get('/upload', (req, res) => {
     res.render('upload.hbs', {
@@ -65,9 +91,18 @@ app.get('/upload', (req, res) => {
     });
 });
 
-
+app.get('/login', (req, res) => {
+    res.render('login.hbs', {
+        pageTitle: 'Login Page'
+    });
+});
+// app.get('/account', (req, res) => {
+//     res.render('account.hbs', {
+//         pageTitle: 'Account Page'
+//     });
+// });
 app.get('/about', (req, res) => {
-    res.render('about.hbs', {
+    res.render('about', {
         pageTitle: 'About Page'
     });
 });
@@ -119,5 +154,26 @@ app.get('/bad', (req, res) => {
     res.send({
         errorMessage: 'Error handling request'
     });
+});
+
+app.post('/users/add', (req,res) => {
+    req.checkBody('first_name', 'First Name is Required').notEmpty();
+    req.checkBody('last_name', 'Last Name is Required').notEmpty();
+    req.checkBody('email', 'Email is Required').notEmpty();
+    var errors = req.validationErrors();
+
+    if(errors) {
+        res.render('login.hbs', {
+            pageTitle: 'Login Page',
+            errors: errors
+        });
+    } else {
+        var newUser = {
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email
+        };
+        console.log('success');
+    }
 });
 app.listen(port);

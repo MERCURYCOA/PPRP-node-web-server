@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Submit</title>
-</head>
-<body>
-<form action="/" enctype="multipart/form-data" method="post">
-    <input type="file" name="upload" multiple>
-    <input type="submit" value="Upload">
-</form>
-</body>
+    <head>
+        <title>Submit</title>
+    </head>
+    <body>
+        <h1>Please sign up here</h1>
+        {{#if errors}}
+            <ul>
+            {{#each errors}}
+                    <li>{{this.msg}}</li>
+            {{/each}}
+            </ul>
+        {{/if}}
+        <form action="/users/add" method="post">
+            <label>First Name</label><br>
+            <input type="text" name="first_name">
+            <br>
+            <label>Last Name</label><br>
+            <input type="text" name="last_name">
+            <br>
+            <label>Email</label><br>
+            <input type="text" name="email">
+            <br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
 </html>
