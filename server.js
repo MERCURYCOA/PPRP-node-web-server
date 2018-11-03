@@ -30,9 +30,11 @@ hbs.registerHelper('screamIt', (text) => {
 // });
 
 //Global var
-app.use((req, res) => {
+app.use((req, res, next) => {
     res.locals.errors = null;
+    next();
 });
+
 app.use(expressValidator());
 app.use(express.static(__dirname + '/public'));
 
